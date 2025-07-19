@@ -13,8 +13,6 @@
       color: #dcdcdc;
       overflow: hidden;
     }
-
-    /* PURE-CSS FOG */
     .fog-layer {
       position: fixed;
       top: 0; left: 0;
@@ -29,14 +27,12 @@
       50% { transform: translate(50px, -30px); }
       100% { transform: translate(0, 0); }
     }
-
     .container {
       position: relative;
       z-index: 2;
       text-align: center;
       padding-top: 60px;
     }
-
     .avatar {
       width: 140px;
       height: 140px;
@@ -44,24 +40,18 @@
       object-fit: cover;
       box-shadow: 0 0 20px rgba(255,255,255,0.2);
     }
-
     h1 {
       font-size: 2.5em;
       color: #c9c9ff;
     }
-
     nav a {
       color: #aaa;
       text-decoration: none;
       margin: 0 15px;
       font-size: 1.1em;
     }
+    nav a:hover { color: white; }
 
-    nav a:hover {
-      color: white;
-    }
-
-    /* MUSIC POPUP */
     #music-btn {
       position: fixed;
       bottom: 20px;
@@ -98,14 +88,13 @@
       margin-left: 10px;
       cursor: pointer;
     }
+
     #music-popup button:hover { color: white; }
   </style>
 </head>
 <body>
-  <!-- PURE CSS FOG -->
   <div class="fog-layer"></div>
 
-  <!-- Main UI -->
   <div class="container">
     <img src="avatar.png" class="avatar" alt="Avatar" />
     <h1>SquidDrill</h1>
@@ -117,7 +106,6 @@
     </nav>
   </div>
 
-  <!-- Music Popup -->
   <button id="music-btn" onclick="toggleMusicPopup()">🎵 music</button>
   <div id="music-popup">
     <span id="song-name">♫ loading...</span>
@@ -125,7 +113,6 @@
     <button onclick="toggleMute()">🔊</button>
   </div>
 
-  <!-- Audio -->
   <audio id="bg-audio" preload="auto">
     <source id="audio-source" src="" type="audio/mp3" />
   </audio>
@@ -136,9 +123,9 @@
     const songName = document.getElementById("song-name");
 
     const playlist = [
-      { title: "lofi-skyline", src: "https://cdn.pixabay.com/audio/2023/06/21/audio_783a184b92.mp3" },
-      { title: "midnight-synths", src: "https://cdn.pixabay.com/audio/2022/10/26/audio_0c730542ce.mp3" },
-      { title: "spacewaves", src: "https://cdn.pixabay.com/audio/2023/03/28/audio_cfe7f94eb8.mp3" }
+      { title: "lofi1", src: "songs/lofi1.mp3" },
+      { title: "lofi2", src: "songs/lofi2.mp3" },
+      { title: "lofi3", src: "songs/lofi3.mp3" }
     ];
 
     let currentTrack = 0;
@@ -169,7 +156,7 @@
       popup.style.display = popup.style.display === "block" ? "none" : "block";
     }
 
-    // Start music after first click
+    // Allow user to click anywhere to start music (autoplay workaround)
     document.body.addEventListener("click", () => {
       if (audio.paused) {
         loadTrack(currentTrack);
