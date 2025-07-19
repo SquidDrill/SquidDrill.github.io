@@ -1,5 +1,3 @@
-# Re-executing after reset to provide the restored working version of index.html
-restored_index_html = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -146,12 +144,13 @@ restored_index_html = """
 <body>
   <div class="intro-screen" id="intro">
 initializing sequence...
-verifying user...
-identity confirmed: SquidDrill
-loading presence...
+scanning presence...
+connection secured.
   </div>
+
   <div class="fog"></div>
   <div id="particles-js"></div>
+
   <div class="container" id="main-content">
     <img src="avatar.png" alt="avatar" class="avatar" />
     <h1 class="glitch">SquidDrill</h1>
@@ -162,6 +161,7 @@ loading presence...
       <a href="#" onclick="openSection('posts')">posts</a>
     </nav>
   </div>
+
   <section id="about"><p>Just a squid surviving the stream.</p><span class="back-btn" onclick="closeSection('about')">← back</span></section>
   <section id="posts"><p>🗒 Nothing yet. Still writing...</p><span class="back-btn" onclick="closeSection('posts')">← back</span></section>
   <section id="socials">
@@ -170,14 +170,17 @@ loading presence...
     <button class="copy-btn" onclick="copyToClipboard('squiddrilll')">copy</button></p>
     <span class="back-btn" onclick="closeSection('socials')">← back</span>
   </section>
+
   <div id="music-box">
     <span id="song-name">♫ lofi-skyline.mp3</span>
     <button onclick="nextTrack()">⏭️</button>
     <button onclick="toggleMute()">🔊</button>
   </div>
+
   <audio id="bg-audio" autoplay loop muted>
     <source id="audio-source" src="https://cdn.pixabay.com/audio/2023/06/21/audio_783a184b92.mp3" type="audio/mp3">
   </audio>
+
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     const playlist = [
@@ -242,9 +245,3 @@ loading presence...
   </script>
 </body>
 </html>
-"""
-
-restored_path = "/mnt/data/index.html"
-with open(restored_path, "w") as f:
-    f.write(restored_index_html)
-restored_path
