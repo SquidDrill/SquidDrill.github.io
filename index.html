@@ -49,8 +49,37 @@
       text-decoration: none;
       margin: 0 15px;
       font-size: 1.1em;
+      cursor: pointer;
     }
     nav a:hover { color: white; }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(10,10,10,0.95);
+      color: white;
+      z-index: 99;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 30px;
+    }
+    .modal button {
+      margin-top: 30px;
+      background: transparent;
+      color: #ccc;
+      border: 1px solid #555;
+      padding: 8px 16px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .modal button:hover {
+      color: white;
+      border-color: white;
+    }
 
     #music-btn {
       position: fixed;
@@ -100,12 +129,35 @@
     <h1>SquidDrill</h1>
     <p class="tagline">currently buffering existence</p>
     <nav>
-      <a href="#">about</a>
-      <a href="#">posts</a>
-      <a href="#">socials</a>
+      <a onclick="openModal('about')">about</a>
+      <a onclick="openModal('posts')">posts</a>
+      <a onclick="openModal('socials')">socials</a>
     </nav>
   </div>
 
+  <!-- Modals -->
+  <div id="about" class="modal">
+    <h2>About Me</h2>
+    <p>Just a human trying to style the void.</p>
+    <button onclick="closeModal('about')">Back</button>
+  </div>
+
+  <div id="posts" class="modal">
+    <h2>Posts</h2>
+    <p>Here lies the unspoken logs of thought...</p>
+    <button onclick="closeModal('posts')">Back</button>
+  </div>
+
+  <div id="socials" class="modal">
+    <h2>Socials</h2>
+    <p>
+      GitHub: <span onclick="copyText('SquidDrill')" style="cursor:pointer;">SquidDrill</span><br>
+      Discord: <span onclick="copyText('squiddrilll')" style="cursor:pointer;">squiddrilll</span>
+    </p>
+    <button onclick="closeModal('socials')">Back</button>
+  </div>
+
+  <!-- Music Popup -->
   <button id="music-btn" onclick="toggleMusicPopup()">🎵 music</button>
   <div id="music-popup">
     <span id="song-name">♫ loading...</span>
@@ -113,11 +165,26 @@
     <button onclick="toggleMute()">🔊</button>
   </div>
 
+  <!-- Audio -->
   <audio id="bg-audio" preload="auto">
     <source id="audio-source" src="" type="audio/mp3" />
   </audio>
 
   <script>
+    // Modal logic
+    function openModal(id) {
+      document.getElementById(id).style.display = 'flex';
+    }
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text);
+      alert('Copied: ' + text);
+    }
+
+    // Music logic
     const audio = document.getElementById("bg-audio");
     const source = document.getElementById("audio-source");
     const songName = document.getElementById("song-name");
@@ -127,7 +194,6 @@
       { title: "lofi2", src: "songs/lofi2.mp3" },
       { title: "lofi3", src: "songs/lofi3.mp3" }
     ];
-
     let currentTrack = 0;
 
     function loadTrack(index) {
@@ -137,7 +203,7 @@
       audio.play().then(() => {
         console.log("Music started");
       }).catch(err => {
-        console.log("Music blocked:", err.message);
+        console.log("Autoplay blocked. User must click.");
       });
     }
 
@@ -156,11 +222,9 @@
       popup.style.display = popup.style.display === "block" ? "none" : "block";
     }
 
-    // Allow user to click anywhere to start music (autoplay workaround)
+    // First click autoplay workaround
     document.body.addEventListener("click", () => {
-      if (audio.paused) {
-        loadTrack(currentTrack);
-      }
+      if (audio.paused) loadTrack(currentTrack);
     }, { once: true });
   </script>
 </body>
