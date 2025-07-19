@@ -6,7 +6,6 @@
   <title>SquidDrill</title>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Share Tech Mono', monospace;
@@ -14,42 +13,9 @@
       color: #dcdcdc;
       overflow: hidden;
     }
-    .fog, #particles-js {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .fog {
-      background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
-      animation: fogMove 120s linear infinite;
-      filter: blur(8px);
-    }
-    @keyframes fogMove {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(-50%, -50%); }
-    }
-    .intro-screen {
-      background: black;
-      color: #00ff88;
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      z-index: 9999;
-      font-size: 1rem;
-      padding: 3rem;
-      font-family: 'Share Tech Mono', monospace;
-      animation: fadeOut 2s ease-out 4s forwards;
-    }
-    @keyframes fadeOut {
-      to { opacity: 0; visibility: hidden; }
-    }
     .container {
       text-align: center;
       padding-top: 60px;
-      position: relative;
-      z-index: 2;
       display: none;
     }
     .avatar {
@@ -66,45 +32,35 @@
     h1.glitch {
       font-size: 2.5em;
       color: #c9c9ff;
-      position: relative;
-      animation: glitch 2s infinite;
-    }
-    @keyframes glitch {
-      0% { text-shadow: 2px 2px #ff00c8; }
-      50% { text-shadow: -2px -2px #00ffe1; }
-      100% { text-shadow: 2px 2px #ff00c8; }
     }
     .tagline {
       font-size: 1em;
       color: #888;
       margin-bottom: 1.5rem;
-      animation: glitch 3s infinite;
     }
     nav a {
       margin: 0 20px;
       text-decoration: none;
       color: #bbb;
       font-size: 1.2em;
-      transition: color 0.3s;
     }
     nav a:hover { color: #fff; }
     section {
       display: none;
       max-width: 600px;
       margin: 2rem auto;
-      font-size: 1em;
       padding: 1.5rem;
-      border-radius: 12px;
       background: rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(5px);
+      border-radius: 12px;
     }
     section.active { display: block; }
     .back-btn {
       display: inline-block;
       margin-top: 1.5rem;
-      text-decoration: underline;
       color: #999;
       cursor: pointer;
+      text-decoration: underline;
     }
     .copy-btn {
       margin-left: 8px;
@@ -115,44 +71,71 @@
       color: #fff;
       cursor: pointer;
     }
-    #music-box {
+    .intro-screen {
       position: fixed;
-      bottom: 10px;
-      right: 10px;
-      background: rgba(0, 0, 0, 0.5);
-      color: #ddd;
-      padding: 10px 15px;
+      width: 100%;
+      height: 100%;
+      background: black;
+      color: #00ff88;
       font-family: 'Share Tech Mono', monospace;
-      font-size: 0.85em;
-      border-radius: 10px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      z-index: 100;
-      backdrop-filter: blur(4px);
+      padding: 3rem;
+      z-index: 9999;
+      animation: fadeOut 2s ease-out 4s forwards;
     }
-    #music-box button {
-      background: transparent;
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    #music-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid #555;
+      color: white;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.9em;
+      border-radius: 8px;
+    }
+
+    #music-popup {
+      position: fixed;
+      bottom: 70px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 0.9em;
+      display: none;
+      backdrop-filter: blur(6px);
+      color: white;
+    }
+
+    #music-popup button {
+      background: none;
       border: none;
       color: #ccc;
+      font-size: 1.1em;
+      margin-left: 10px;
       cursor: pointer;
-      font-size: 1em;
     }
-    #music-box button:hover { color: white; }
+
+    #music-popup button:hover {
+      color: white;
+    }
   </style>
 </head>
 <body>
   <div class="intro-screen" id="intro">
-initializing sequence...
-scanning presence...
-connection secured.
+Initializing...<br>
+Awakening stream...<br>
+Connected.
   </div>
 
-  <div class="fog"></div>
-  <div id="particles-js"></div>
-
   <div class="container" id="main-content">
-    <img src="avatar.png" alt="avatar" class="avatar" />
+    <img src="avatar.png" class="avatar" alt="Avatar">
     <h1 class="glitch">SquidDrill</h1>
     <p class="tagline">currently buffering existence</p>
     <nav>
@@ -162,16 +145,27 @@ connection secured.
     </nav>
   </div>
 
-  <section id="about"><p>Just a squid surviving the stream.</p><span class="back-btn" onclick="closeSection('about')">← back</span></section>
-  <section id="posts"><p>🗒 Nothing yet. Still writing...</p><span class="back-btn" onclick="closeSection('posts')">← back</span></section>
+  <section id="about">
+    <p>Just a squid surviving the stream.</p>
+    <span class="back-btn" onclick="closeSection('about')">← back</span>
+  </section>
+
+  <section id="posts">
+    <p>🗒 Nothing yet. Still writing...</p>
+    <span class="back-btn" onclick="closeSection('posts')">← back</span>
+  </section>
+
   <section id="socials">
     <p>GitHub: <a href="https://github.com/SquidDrill" target="_blank">SquidDrill</a></p>
     <p>Discord: <span id="discordID">squiddrilll</span>
-    <button class="copy-btn" onclick="copyToClipboard('squiddrilll')">copy</button></p>
+      <button class="copy-btn" onclick="copyToClipboard('squiddrilll')">copy</button>
+    </p>
     <span class="back-btn" onclick="closeSection('socials')">← back</span>
   </section>
 
-  <div id="music-box">
+  <!-- Music Button & Popup -->
+  <button id="music-btn" onclick="toggleMusicPopup()">🎵 music</button>
+  <div id="music-popup">
     <span id="song-name">♫ lofi-skyline.mp3</span>
     <button onclick="nextTrack()">⏭️</button>
     <button onclick="toggleMute()">🔊</button>
@@ -181,16 +175,16 @@ connection secured.
     <source id="audio-source" src="https://cdn.pixabay.com/audio/2023/06/21/audio_783a184b92.mp3" type="audio/mp3">
   </audio>
 
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
+    const audio = document.getElementById("bg-audio");
+    const audioSource = document.getElementById("audio-source");
+    const songName = document.getElementById("song-name");
+    const musicPopup = document.getElementById("music-popup");
     const playlist = [
       { title: "lofi-skyline.mp3", src: "https://cdn.pixabay.com/audio/2023/06/21/audio_783a184b92.mp3" },
       { title: "midnight-synths.mp3", src: "https://cdn.pixabay.com/audio/2022/10/26/audio_0c730542ce.mp3" }
     ];
     let currentTrack = 0;
-    const audio = document.getElementById("bg-audio");
-    const audioSource = document.getElementById("audio-source");
-    const songName = document.getElementById("song-name");
 
     function loadTrack(index) {
       audioSource.src = playlist[index].src;
@@ -206,7 +200,11 @@ connection secured.
 
     function toggleMute() {
       audio.muted = !audio.muted;
-      document.querySelector("#music-box button:last-child").textContent = audio.muted ? "🔇" : "🔊";
+      document.querySelector("#music-popup button:last-child").textContent = audio.muted ? "🔇" : "🔊";
+    }
+
+    function toggleMusicPopup() {
+      musicPopup.style.display = (musicPopup.style.display === "block") ? "none" : "block";
     }
 
     function openSection(id) {
@@ -232,16 +230,6 @@ connection secured.
         audio.play();
       }, 4000);
     };
-
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 35 },
-        size: { value: 2 },
-        color: { value: "#ffffff" },
-        line_linked: { enable: false },
-        move: { speed: 0.3 }
-      }
-    });
   </script>
 </body>
 </html>
