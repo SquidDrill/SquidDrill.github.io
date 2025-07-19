@@ -11,8 +11,8 @@
       font-family: 'Share Tech Mono', monospace;
       background: #0a0a0a;
       color: #dcdcdc;
-      overflow: hidden;
     }
+
     .fog-layer {
       position: fixed;
       top: 0; left: 0;
@@ -27,12 +27,33 @@
       50% { transform: translate(50px, -30px); }
       100% { transform: translate(0, 0); }
     }
+
+    .intro-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: #0a0a0a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 1000;
+      cursor: pointer;
+      transition: opacity 1s ease;
+    }
+    .intro-screen h1 {
+      font-size: 2em;
+      color: #c9c9ff;
+    }
+
     .container {
-      position: relative;
-      z-index: 2;
+      display: none;
       text-align: center;
       padding-top: 60px;
+      position: relative;
+      z-index: 2;
     }
+
     .avatar {
       width: 140px;
       height: 140px;
@@ -40,10 +61,7 @@
       object-fit: cover;
       box-shadow: 0 0 20px rgba(255,255,255,0.2);
     }
-    h1 {
-      font-size: 2.5em;
-      color: #c9c9ff;
-    }
+
     nav a {
       color: #aaa;
       text-decoration: none;
@@ -56,24 +74,22 @@
     .modal {
       display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(10,10,10,0.95);
-      color: white;
-      z-index: 99;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      text-align: center;
-      padding: 30px;
+      bottom: 100px;
+      right: 20px;
+      max-width: 300px;
+      background: rgba(0,0,0,0.8);
+      padding: 18px;
+      border-radius: 12px;
+      z-index: 10;
     }
+
     .modal button {
-      margin-top: 30px;
+      margin-top: 10px;
       background: transparent;
       color: #ccc;
       border: 1px solid #555;
-      padding: 8px 16px;
-      font-size: 1em;
+      padding: 6px 12px;
+      font-size: 0.9em;
       cursor: pointer;
     }
     .modal button:hover {
@@ -108,83 +124,85 @@
       color: white;
       z-index: 10;
     }
-
-    #music-popup button {
-      background: none;
-      border: none;
-      color: #ccc;
-      font-size: 1.1em;
-      margin-left: 10px;
-      cursor: pointer;
-    }
-
-    #music-popup button:hover { color: white; }
   </style>
 </head>
 <body>
   <div class="fog-layer"></div>
 
-  <div class="container">
+  <!-- Intro Screen -->
+  <div class="intro-screen" onclick="startSite()">
+    <h1>// booting into the void</h1>
+    <p>click anywhere to continue</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container" id="main-content">
     <img src="avatar.png" class="avatar" alt="Avatar" />
     <h1>SquidDrill</h1>
     <p class="tagline">currently buffering existence</p>
     <nav>
-      <a onclick="openModal('about')">about</a>
-      <a onclick="openModal('posts')">posts</a>
-      <a onclick="openModal('socials')">socials</a>
+      <a onclick="toggleModal('about')">about</a>
+      <a onclick="toggleModal('posts')">posts</a>
+      <a onclick="toggleModal('socials')">socials</a>
     </nav>
   </div>
 
   <!-- Modals -->
   <div id="about" class="modal">
-    <h2>About Me</h2>
+    <h3>About Me</h3>
     <p>Just a human trying to style the void.</p>
-    <button onclick="closeModal('about')">Back</button>
+    <button onclick="toggleModal('about')">Close</button>
   </div>
 
   <div id="posts" class="modal">
-    <h2>Posts</h2>
-    <p>Here lies the unspoken logs of thought...</p>
-    <button onclick="closeModal('posts')">Back</button>
+    <h3>Posts</h3>
+    <p>Nothing posted yet... but the thoughts linger.</p>
+    <button onclick="toggleModal('posts')">Close</button>
   </div>
 
   <div id="socials" class="modal">
-    <h2>Socials</h2>
+    <h3>Socials</h3>
     <p>
       GitHub: <span onclick="copyText('SquidDrill')" style="cursor:pointer;">SquidDrill</span><br>
       Discord: <span onclick="copyText('squiddrilll')" style="cursor:pointer;">squiddrilll</span>
     </p>
-    <button onclick="closeModal('socials')">Back</button>
+    <button onclick="toggleModal('socials')">Close</button>
   </div>
 
-  <!-- Music Popup -->
+  <!-- Music Player -->
   <button id="music-btn" onclick="toggleMusicPopup()">🎵 music</button>
   <div id="music-popup">
     <span id="song-name">♫ loading...</span>
     <button onclick="nextTrack()">⏭️</button>
     <button onclick="toggleMute()">🔊</button>
   </div>
-
-  <!-- Audio -->
   <audio id="bg-audio" preload="auto">
     <source id="audio-source" src="" type="audio/mp3" />
   </audio>
 
+  <!-- Scripts -->
   <script>
-    // Modal logic
-    function openModal(id) {
-      document.getElementById(id).style.display = 'flex';
+    function startSite() {
+      document.querySelector(".intro-screen").style.display = "none";
+      document.getElementById("main-content").style.display = "block";
+      if (audio.paused) loadTrack(currentTrack);
     }
-    function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
+
+    function toggleModal(id) {
+      const modal = document.getElementById(id);
+      modal.style.display = (modal.style.display === "block") ? "none" : "block";
     }
 
     function copyText(text) {
       navigator.clipboard.writeText(text);
-      alert('Copied: ' + text);
+      alert("Copied: " + text);
     }
 
-    // Music logic
+    function toggleMusicPopup() {
+      const popup = document.getElementById("music-popup");
+      popup.style.display = popup.style.display === "block" ? "none" : "block";
+    }
+
     const audio = document.getElementById("bg-audio");
     const source = document.getElementById("audio-source");
     const songName = document.getElementById("song-name");
@@ -200,16 +218,7 @@
       source.src = playlist[index].src;
       songName.textContent = "♫ " + playlist[index].title;
       audio.load();
-      audio.play().then(() => {
-        console.log("Music started");
-      }).catch(err => {
-        console.log("Autoplay blocked. User must click.");
-      });
-    }
-
-    function toggleMute() {
-      audio.muted = !audio.muted;
-      document.querySelector("#music-popup button:last-child").textContent = audio.muted ? "🔇" : "🔊";
+      audio.play().catch(err => console.log("Autoplay blocked"));
     }
 
     function nextTrack() {
@@ -217,15 +226,10 @@
       loadTrack(currentTrack);
     }
 
-    function toggleMusicPopup() {
-      const popup = document.getElementById("music-popup");
-      popup.style.display = popup.style.display === "block" ? "none" : "block";
+    function toggleMute() {
+      audio.muted = !audio.muted;
+      document.querySelector("#music-popup button:last-child").textContent = audio.muted ? "🔇" : "🔊";
     }
-
-    // First click autoplay workaround
-    document.body.addEventListener("click", () => {
-      if (audio.paused) loadTrack(currentTrack);
-    }, { once: true });
   </script>
 </body>
 </html>
