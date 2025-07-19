@@ -29,23 +29,44 @@
     }
 
     .intro-screen {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: #0a0a0a;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      z-index: 1000;
-      cursor: pointer;
-      transition: opacity 1s ease;
-    }
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: #0a0a0a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 1000;
+  cursor: pointer;
+  overflow: hidden; /* important for ripple effect */
+}
 
-    .intro-screen h1 {
-      font-size: 2em;
-      color: #c9c9ff;
-    }
+/* Ripple effect element inside the intro screen */
+.ripple-transition {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: #c9c9ff;
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 999;
+  animation: none;
+}
+
+@keyframes rippleExpand {
+  0% {
+    transform: scale(0);
+    opacity: 0.25;
+  }
+  100% {
+    transform: scale(60);
+    opacity: 0;
+  }
+}
+
 
     .container {
       display: none;
