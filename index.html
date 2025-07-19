@@ -6,11 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Share Tech Mono', monospace;
       background: #0a0a0a;
       color: #dcdcdc;
+      overflow-x: hidden;
     }
 
     .fog-layer {
@@ -25,7 +30,7 @@
 
     @keyframes moveFog {
       0% { transform: translate(0, 0); }
-      50% { transform: translate(50px, -30px); }
+      50% { transform: translate(60px, -40px); }
       100% { transform: translate(0, 0); }
     }
 
@@ -57,14 +62,8 @@
     }
 
     @keyframes rippleExpand {
-      0% {
-        transform: scale(0);
-        opacity: 0.25;
-      }
-      100% {
-        transform: scale(60);
-        opacity: 0;
-      }
+      0% { transform: scale(0); opacity: 0.25; }
+      100% { transform: scale(60); opacity: 0; }
     }
 
     .container {
@@ -91,22 +90,26 @@
       cursor: pointer;
     }
 
-    nav a:hover { color: white; }
+    nav a:hover {
+      color: white;
+    }
 
     .modal {
       display: none;
       position: fixed;
-      bottom: 100px;
-      right: 20px;
-      max-width: 300px;
-      background: rgba(0,0,0,0.8);
-      padding: 18px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.9);
+      padding: 20px 30px;
       border-radius: 12px;
-      z-index: 10;
+      z-index: 15;
+      max-width: 80%;
+      text-align: center;
     }
 
     .modal button {
-      margin-top: 10px;
+      margin-top: 15px;
       background: transparent;
       color: #ccc;
       border: 1px solid #555;
@@ -118,6 +121,14 @@
     .modal button:hover {
       color: white;
       border-color: white;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 14;
+      display: none;
     }
 
     #music-btn {
@@ -147,6 +158,12 @@
       color: white;
       z-index: 10;
     }
+
+    .tagline {
+      color: #888;
+      font-size: 0.9em;
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body>
@@ -158,6 +175,9 @@
     <h1>// booting into the void</h1>
     <p>click anywhere to continue</p>
   </div>
+
+  <!-- Overlay for modals -->
+  <div id="overlay" onclick="closeAllModals()"></div>
 
   <!-- Main Content -->
   <div class="container" id="main-content">
@@ -187,8 +207,8 @@
   <div id="socials" class="modal">
     <h3>Socials</h3>
     <p>
-      GitHub: <span onclick="copyText('SquidDrill')" style="cursor:pointer;">SquidDrill</span><br>
-      Discord: <span onclick="copyText('squiddrilll')" style="cursor:pointer;">squiddrilll</span>
+      GitHub: <a href="https://github.com/SquidDrill" target="_blank">SquidDrill</a><br>
+      Discord: <span onclick="copyText('squiddrilll')" style="cursor:pointer;">squiddrilll (click to copy)</span>
     </p>
     <button onclick="closeAllModals()">Close</button>
   </div>
@@ -212,7 +232,6 @@
 
       ripple.style.left = event.clientX + "px";
       ripple.style.top = event.clientY + "px";
-      ripple.style.transform = "scale(0)";
       ripple.style.animation = "rippleExpand 1s ease-out forwards";
 
       setTimeout(() => {
@@ -224,12 +243,13 @@
 
     function openModal(id) {
       closeAllModals();
-      document.getElementById(id).style.display = 'block';
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById(id).style.display = "block";
     }
 
     function closeAllModals() {
-      const modals = document.querySelectorAll('.modal');
-      modals.forEach(modal => modal.style.display = 'none');
+      document.getElementById("overlay").style.display = "none";
+      document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
     }
 
     function copyText(text) {
