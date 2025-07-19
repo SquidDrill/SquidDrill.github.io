@@ -272,11 +272,14 @@ Generating fog layer...
     };
 
     document.body.addEventListener("click", () => {
-      if (audio.paused) {
-        loadTrack(currentTrack);
-        audio.muted = false;
-      }
-    }, { once: true });
+  if (audio.paused) {
+    loadTrack(currentTrack);
+    audio.play().catch(err => {
+      console.log("Autoplay failed. User interaction needed.", err);
+    });
+  }
+}, { once: true });
+
   </script>
 </body>
 </html>
