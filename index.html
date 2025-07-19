@@ -1,224 +1,197 @@
-# Preparing the updated aesthetic site structure with enhanced features
+import zipfile
+from pathlib import Path
 
-# Define updated index.html content (initial skeleton)
-enhanced_index_html = """<!DOCTYPE html>
+# Prepare the folder structure
+site_dir = Path("/mnt/data/squiddrill_site")
+site_dir.mkdir(exist_ok=True)
+
+# Paths for assets
+html_path = site_dir / "index.html"
+css_path = site_dir / "styles.css"
+js_path = site_dir / "script.js"
+music_path = site_dir / "bg-music.mp3"
+avatar_path = site_dir / "avatar.png"
+
+# Sample ambient audio placeholder (you can replace with real one in your repo)
+# We'll not add actual audio here due to space, just filename reference
+
+# HTML content
+html_content = """
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SquidDrill</title>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Share Tech Mono', monospace;
-      background: #0e0e0e;
-      color: #dcdcdc;
-      overflow-x: hidden;
-    }
-
-    .fog {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
-      animation: fogMove 120s linear infinite;
-      pointer-events: none;
-      z-index: 0;
-      filter: blur(8px);
-    }
-
-    @keyframes fogMove {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(-50%, -50%); }
-    }
-
-    .container {
-      text-align: center;
-      padding-top: 60px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .avatar {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      filter: grayscale(100%) drop-shadow(0 0 12px #aaa);
-      margin-bottom: 10px;
-    }
-
-    h1 {
-      font-size: 3em;
-      color: #b8b8ff;
-      margin: 0;
-    }
-
-    .tagline {
-      font-size: 1em;
-      margin-top: -10px;
-      color: #888;
-    }
-
-    nav {
-      margin-top: 30px;
-    }
-
-    nav a {
-      margin: 0 20px;
-      text-decoration: none;
-      color: #ccc;
-      font-size: 1.2em;
-      transition: color 0.3s;
-    }
-
-    nav a:hover {
-      color: #fff;
-    }
-
-    section {
-      display: none;
-      max-width: 600px;
-      margin: 40px auto;
-      font-size: 1.1em;
-      line-height: 1.6;
-    }
-
-    .back-btn {
-      display: block;
-      margin: 20px auto;
-      color: #999;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    #music-control {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      z-index: 99;
-      background: rgba(0,0,0,0.5);
-      border: none;
-      color: #ccc;
-      font-size: 0.9em;
-      padding: 6px 12px;
-      cursor: pointer;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(20, 20, 20, 0.9);
-      padding: 30px;
-      border: 1px solid #444;
-      border-radius: 10px;
-      color: #fff;
-      z-index: 100;
-    }
-
-    .modal h3 {
-      margin-top: 0;
-    }
-
-    .copy-btn {
-      background: #333;
-      color: #fff;
-      border: none;
-      margin-left: 10px;
-      cursor: pointer;
-      padding: 2px 6px;
-    }
-
-    .modal-close {
-      margin-top: 10px;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="fog"></div>
-
   <div class="container">
-    <img src="avatar.png" alt="avatar" class="avatar"/>
+    <img src="avatar.png" alt="avatar" class="avatar">
     <h1>SquidDrill</h1>
-    <p class="tagline">JUST A HUMAN</p>
-
+    <p class="tagline">currently buffering existence</p>
     <nav>
-      <a href="#" onclick="openSection('about')">about</a> |
-      <a href="#" onclick="openSocials()">socials</a> |
-      <a href="#" onclick="openSection('posts')">posts</a>
+      <a href="#" onclick="showPage('about')">about</a> |
+      <a href="#" onclick="showPage('socials')">socials</a> |
+      <a href="#" onclick="showPage('posts')">posts</a>
     </nav>
   </div>
 
-  <section id="about">
+  <div id="about" class="page">
     <p>I think, therefore I log off.<br>Probably overthinking something right now.</p>
-    <span class="back-btn" onclick="closeSection('about')">← back</span>
-  </section>
-
-  <section id="posts">
-    <p>Nothing here yet... but something always brews under the surface.</p>
-    <span class="back-btn" onclick="closeSection('posts')">← back</span>
-  </section>
-
-  <!-- Socials Modal -->
-  <div class="modal" id="socialModal">
-    <h3>Socials</h3>
-    <p>GitHub: SquidDrill <button class="copy-btn" onclick="copyToClipboard('SquidDrill')">copy</button></p>
-    <p>Discord: squiddrilll <button class="copy-btn" onclick="copyToClipboard('squiddrilll')">copy</button></p>
-    <p class="modal-close" onclick="closeSocials()">Close</p>
+    <a href="#" onclick="hidePages()">← back</a>
   </div>
 
-  <audio id="bg-music" autoplay loop>
-    <source src="https://cdn.pixabay.com/audio/2023/06/21/audio_783a184b92.mp3" type="audio/mp3">
+  <div id="posts" class="page">
+    <p>Nothing here yet... but something always brews under the surface.</p>
+    <a href="#" onclick="hidePages()">← back</a>
+  </div>
+
+  <div id="socials" class="page modal">
+    <p><strong>GitHub:</strong> <span class="copyable" onclick="copyText('SquidDrill')">SquidDrill</span><br>
+       <strong>Discord:</strong> <span class="copyable" onclick="copyText('squiddrilll')">squiddrilll</span></p>
+    <a href="#" onclick="hidePages()">← back</a>
+  </div>
+
+  <audio id="bg-music" loop autoplay muted>
+    <source src="bg-music.mp3" type="audio/mp3">
+    Your browser does not support the audio tag.
   </audio>
-  <button id="music-control" onclick="toggleMusic()">♫ music</button>
+  <button class="music-btn" onclick="toggleMusic()">♫ music</button>
 
-  <script>
-    function openSection(id) {
-      document.getElementById(id).style.display = 'block';
-    }
-
-    function closeSection(id) {
-      document.getElementById(id).style.display = 'none';
-    }
-
-    function openSocials() {
-      document.getElementById('socialModal').style.display = 'block';
-    }
-
-    function closeSocials() {
-      document.getElementById('socialModal').style.display = 'none';
-    }
-
-    function copyToClipboard(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        alert('Copied: ' + text);
-      });
-    }
-
-    function toggleMusic() {
-      var music = document.getElementById('bg-music');
-      if (music.paused) {
-        music.play();
-      } else {
-        music.pause();
-      }
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
 """
 
-# Write it to file
-html_path = "/mnt/data/index.html"
-with open(html_path, "w") as f:
-    f.write(enhanced_index_html)
+# CSS content
+css_content = """
+body {
+  margin: 0;
+  font-family: monospace;
+  background-color: #0d0d0d;
+  color: #cccccc;
+  overflow-x: hidden;
+}
 
-html_path
+.container {
+  text-align: center;
+  padding-top: 60px;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  filter: grayscale(100%) blur(0.2px);
+  box-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+
+.tagline {
+  margin: 0.5em 0 1.5em;
+  color: #888;
+}
+
+nav a {
+  color: #aaa;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.page {
+  display: none;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #444;
+  padding: 20px;
+  width: 70%;
+  margin: 40px auto;
+  border-radius: 10px;
+}
+
+.copyable {
+  color: #9cf;
+  cursor: pointer;
+}
+
+.copyable:hover {
+  text-decoration: underline;
+}
+
+.fog {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 1%, transparent 100%);
+  background-size: 40px 40px;
+  z-index: -1;
+  animation: fogmove 15s infinite linear;
+}
+
+@keyframes fogmove {
+  from { background-position: 0 0; }
+  to { background-position: 100% 100%; }
+}
+
+.music-btn {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid #999;
+  color: #ccc;
+  cursor: pointer;
+  font-family: monospace;
+}
+"""
+
+# JS content
+js_content = """
+function showPage(id) {
+  hidePages();
+  document.getElementById(id).style.display = 'block';
+}
+
+function hidePages() {
+  const pages = document.querySelectorAll('.page');
+  pages.forEach(p => p.style.display = 'none');
+}
+
+function toggleMusic() {
+  const audio = document.getElementById('bg-music');
+  audio.muted = !audio.muted;
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text);
+  alert(`Copied: ${text}`);
+}
+"""
+
+# Write files
+html_path.write_text(html_content)
+css_path.write_text(css_content)
+js_path.write_text(js_content)
+
+# Use original avatar from user
+original_avatar = Path("/mnt/data/e0347b46-e74b-43ea-86a0-16df20d9bca7.png")
+avatar_path.write_bytes(original_avatar.read_bytes())
+
+# Create a dummy MP3 file reference
+music_path.write_bytes(b"" if not music_path.exists() else music_path.read_bytes())
+
+# Zip everything
+zip_path = "/mnt/data/squiddrill_site.zip"
+with zipfile.ZipFile(zip_path, "w") as zipf:
+    for file in site_dir.iterdir():
+        zipf.write(file, arcname=file.name)
+
+zip_path
