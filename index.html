@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SquidDrill</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'IBM Plex Mono', monospace;
+      background: #0a0a0a;
+      color: #ccc;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url('https://i.ibb.co/fXydrWY/fog-texture.png') repeat;
+      opacity: 0.03;
+      z-index: 0;
+      animation: fogScroll 100s linear infinite;
+    }
+
+    @keyframes fogScroll {
+      from { background-position: 0 0; }
+      to { background-position: 10000px 10000px; }
+    }
+
+    nav {
+      text-align: center;
+      padding: 1.2rem 0;
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      position: sticky;
+      top: 0;
+    }
+
+    nav a {
+      margin: 0 1rem;
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    nav a:hover {
+      color: white;
+    }
+
+    .center {
+      text-align: center;
+      padding-top: 5rem;
+      z-index: 2;
+    }
+
+    .avatar {
+      width: 160px;
+      border-radius: 16px;
+      filter: grayscale(1) brightness(1.1);
+      opacity: 0.85;
+      transition: all 0.3s ease;
+    }
+
+    .avatar:hover {
+      filter: grayscale(0) brightness(1.2);
+      opacity: 1;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+    }
+
+    h1 {
+      margin-top: 1rem;
+      font-size: 2.4rem;
+      color: #bcbcbc;
+    }
+
+    .tagline {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      opacity: 0.6;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      color: #ccc;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 99;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .overlay.active {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .overlay h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .overlay p {
+      font-size: 1rem;
+      max-width: 600px;
+      opacity: 0.75;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 2rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .close-btn:hover {
+      color: white;
+    }
+
+    .audio-button {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid #444;
+      color: #999;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      font-family: monospace;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#" onclick="openOverlay('about')">about</a> |
+  <a href="#" onclick="openOverlay('socials')">socials</a> |
+  <a href="#" onclick="openOverlay('posts')">posts</a>
+</nav>
+
+<div class="center">
+  <img src="avatar.png" alt="avatar" class="avatar">
+  <h1>SquidDrill</h1>
+  <div class="tagline">JUST A HUMAN</div>
+</div>
+
+<!-- overlays -->
+<div id="about" class="overlay">
+  <div class="close-btn" onclick="closeOverlay()">✖</div>
+  <h2>about</h2>
+  <p>I think, therefore I log off.<br>Probably overthinking something right now.</p>
+</div>
+
+<div id="socials" class="overlay">
+  <div class="close-btn" onclick="closeOverlay()">✖</div>
+  <h2>socials</h2>
+  <p>GitHub: <a href="https://github.com/SquidDrill" target="_blank">SquidDrill</a><br>Discord: @squiddrilll</p>
+</div>
+
+<div id="posts" class="overlay">
+  <div class="close-btn" onclick="closeOverlay()">✖</div>
+  <h2>posts</h2>
+  <p>Nothing here... yet. Just static silence.</p>
+</div>
+
+<div class="audio-button" onclick="toggleAudio(this)">🔊 music</div>
+
+<audio id="bg-audio" loop autoplay>
+  <source src="https://cdn.pixabay.com/download/audio/2022/10/23/audio_d4c3cfa0e2.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+function openOverlay(id) {
+  document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function closeOverlay() {
+  document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
+}
+function toggleAudio(btn) {
+  const audio = document.getElementById('bg-audio');
+  if (audio.paused) {
+    audio.play();
+    btn.innerText = '🔊 music';
+  } else {
+    audio.pause();
+    btn.innerText = '🔇 muted';
+  }
+}
+</script>
+
+</body>
+</html>
