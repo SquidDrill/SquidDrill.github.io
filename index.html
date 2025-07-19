@@ -41,6 +41,7 @@
       cursor: pointer;
       transition: opacity 1s ease;
     }
+
     .intro-screen h1 {
       font-size: 2em;
       color: #c9c9ff;
@@ -69,6 +70,7 @@
       font-size: 1.1em;
       cursor: pointer;
     }
+
     nav a:hover { color: white; }
 
     .modal {
@@ -92,6 +94,7 @@
       font-size: 0.9em;
       cursor: pointer;
     }
+
     .modal button:hover {
       color: white;
       border-color: white;
@@ -141,9 +144,9 @@
     <h1>SquidDrill</h1>
     <p class="tagline">currently buffering existence</p>
     <nav>
-      <a onclick="toggleModal('about')">about</a>
-      <a onclick="toggleModal('posts')">posts</a>
-      <a onclick="toggleModal('socials')">socials</a>
+      <a onclick="openModal('about')">about</a>
+      <a onclick="openModal('posts')">posts</a>
+      <a onclick="openModal('socials')">socials</a>
     </nav>
   </div>
 
@@ -151,13 +154,13 @@
   <div id="about" class="modal">
     <h3>About Me</h3>
     <p>Just a human trying to style the void.</p>
-    <button onclick="toggleModal('about')">Close</button>
+    <button onclick="closeAllModals()">Close</button>
   </div>
 
   <div id="posts" class="modal">
     <h3>Posts</h3>
     <p>Nothing posted yet... but the thoughts linger.</p>
-    <button onclick="toggleModal('posts')">Close</button>
+    <button onclick="closeAllModals()">Close</button>
   </div>
 
   <div id="socials" class="modal">
@@ -166,7 +169,7 @@
       GitHub: <span onclick="copyText('SquidDrill')" style="cursor:pointer;">SquidDrill</span><br>
       Discord: <span onclick="copyText('squiddrilll')" style="cursor:pointer;">squiddrilll</span>
     </p>
-    <button onclick="toggleModal('socials')">Close</button>
+    <button onclick="closeAllModals()">Close</button>
   </div>
 
   <!-- Music Player -->
@@ -188,9 +191,14 @@
       if (audio.paused) loadTrack(currentTrack);
     }
 
-    function toggleModal(id) {
-      const modal = document.getElementById(id);
-      modal.style.display = (modal.style.display === "block") ? "none" : "block";
+    function openModal(id) {
+      closeAllModals();
+      document.getElementById(id).style.display = 'block';
+    }
+
+    function closeAllModals() {
+      const modals = document.querySelectorAll('.modal');
+      modals.forEach(modal => modal.style.display = 'none');
     }
 
     function copyText(text) {
