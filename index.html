@@ -292,6 +292,14 @@
       audio.muted = !audio.muted;
       document.querySelector("#music-popup button:last-child").textContent = audio.muted ? "🔇" : "🔊";
     }
+    function openModal(id) {
+  closeAllModals();
+  document.getElementById("overlay").style.display = "block";
+
+  const modal = document.getElementById(id);
+  modal.style.display = "block";
+}
+
   </script>
 </body>
 </html>
