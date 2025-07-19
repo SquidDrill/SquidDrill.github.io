@@ -129,9 +129,10 @@
 </head>
 <body>
   <div class="intro-screen" id="intro">
-Initializing...<br>
-Awakening stream...<br>
-Connected.
+Booting visual interface...<br>
+Initializing presence...<br>
+Observing entity: SquidDrill...<br>
+Status: idle streamwalker...
   </div>
 
   <div class="container" id="main-content">
@@ -171,7 +172,7 @@ Connected.
     <button onclick="toggleMute()">🔊</button>
   </div>
 
-  <audio id="bg-audio" autoplay loop muted>
+  <audio id="bg-audio" loop>
     <source id="audio-source" src="https://cdn.pixabay.com/audio/2023/06/21/audio_783a184b92.mp3" type="audio/mp3">
   </audio>
 
@@ -226,10 +227,18 @@ Connected.
       setTimeout(() => {
         document.getElementById("intro").style.display = "none";
         document.getElementById("main-content").style.display = "block";
-        audio.muted = false;
-        audio.play();
       }, 4000);
     };
+
+    // Ensure music only plays on first click
+    document.body.addEventListener("click", () => {
+      if (audio.paused) {
+        audio.muted = false;
+        audio.play().catch(err => {
+          console.log("Autoplay blocked");
+        });
+      }
+    }, { once: true });
   </script>
 </body>
 </html>
