@@ -1,214 +1,224 @@
-<!DOCTYPE html>
+# Preparing the updated aesthetic site structure with enhanced features
+
+# Define updated index.html content (initial skeleton)
+enhanced_index_html = """<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SquidDrill</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      font-family: 'IBM Plex Mono', monospace;
-      background: #0a0a0a;
-      color: #ccc;
+      font-family: 'Share Tech Mono', monospace;
+      background: #0e0e0e;
+      color: #dcdcdc;
       overflow-x: hidden;
-      scroll-behavior: smooth;
     }
 
-    body::before {
-      content: "";
+    .fog {
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: url('https://i.ibb.co/fXydrWY/fog-texture.png') repeat;
-      opacity: 0.03;
-      z-index: 0;
-      animation: fogScroll 100s linear infinite;
-    }
-
-    @keyframes fogScroll {
-      from { background-position: 0 0; }
-      to { background-position: 10000px 10000px; }
-    }
-
-    nav {
-      text-align: center;
-      padding: 1.2rem 0;
-      font-weight: 600;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: 10;
-      position: sticky;
       top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+      animation: fogMove 120s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(8px);
     }
 
-    nav a {
-      margin: 0 1rem;
-      color: #ccc;
-      text-decoration: none;
-      transition: color 0.2s ease;
+    @keyframes fogMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-50%, -50%); }
     }
 
-    nav a:hover {
-      color: white;
-    }
-
-    .center {
+    .container {
       text-align: center;
-      padding-top: 5rem;
-      z-index: 2;
+      padding-top: 60px;
+      position: relative;
+      z-index: 1;
     }
 
     .avatar {
-      width: 160px;
-      border-radius: 16px;
-      filter: grayscale(1) brightness(1.1);
-      opacity: 0.85;
-      transition: all 0.3s ease;
-    }
-
-    .avatar:hover {
-      filter: grayscale(0) brightness(1.2);
-      opacity: 1;
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      filter: grayscale(100%) drop-shadow(0 0 12px #aaa);
+      margin-bottom: 10px;
     }
 
     h1 {
-      margin-top: 1rem;
-      font-size: 2.4rem;
-      color: #bcbcbc;
+      font-size: 3em;
+      color: #b8b8ff;
+      margin: 0;
     }
 
     .tagline {
-      font-size: 1rem;
-      margin-top: 0.5rem;
-      opacity: 0.6;
-    }
-
-    .overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.95);
-      color: #ccc;
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 99;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .overlay.active {
-      display: flex;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .overlay h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      color: #fff;
-    }
-
-    .overlay p {
-      font-size: 1rem;
-      max-width: 600px;
-      opacity: 0.75;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 1rem;
-      right: 2rem;
-      font-size: 1.2rem;
-      cursor: pointer;
+      font-size: 1em;
+      margin-top: -10px;
       color: #888;
     }
 
-    .close-btn:hover {
-      color: white;
+    nav {
+      margin-top: 30px;
     }
 
-    .audio-button {
-      position: fixed;
-      right: 1rem;
-      bottom: 1rem;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid #444;
+    nav a {
+      margin: 0 20px;
+      text-decoration: none;
+      color: #ccc;
+      font-size: 1.2em;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #fff;
+    }
+
+    section {
+      display: none;
+      max-width: 600px;
+      margin: 40px auto;
+      font-size: 1.1em;
+      line-height: 1.6;
+    }
+
+    .back-btn {
+      display: block;
+      margin: 20px auto;
       color: #999;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.8rem;
-      font-family: monospace;
+      text-decoration: underline;
       cursor: pointer;
-      z-index: 10;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    #music-control {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      z-index: 99;
+      background: rgba(0,0,0,0.5);
+      border: none;
+      color: #ccc;
+      font-size: 0.9em;
+      padding: 6px 12px;
+      cursor: pointer;
     }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(20, 20, 20, 0.9);
+      padding: 30px;
+      border: 1px solid #444;
+      border-radius: 10px;
+      color: #fff;
+      z-index: 100;
+    }
+
+    .modal h3 {
+      margin-top: 0;
+    }
+
+    .copy-btn {
+      background: #333;
+      color: #fff;
+      border: none;
+      margin-left: 10px;
+      cursor: pointer;
+      padding: 2px 6px;
+    }
+
+    .modal-close {
+      margin-top: 10px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 <body>
+  <div class="fog"></div>
 
-<nav>
-  <a href="#" onclick="openOverlay('about')">about</a> |
-  <a href="#" onclick="openOverlay('socials')">socials</a> |
-  <a href="#" onclick="openOverlay('posts')">posts</a>
-</nav>
+  <div class="container">
+    <img src="avatar.png" alt="avatar" class="avatar"/>
+    <h1>SquidDrill</h1>
+    <p class="tagline">JUST A HUMAN</p>
 
-<div class="center">
-  <img src="avatar.png" alt="avatar" class="avatar">
-  <h1>SquidDrill</h1>
-  <div class="tagline">JUST A HUMAN</div>
-</div>
+    <nav>
+      <a href="#" onclick="openSection('about')">about</a> |
+      <a href="#" onclick="openSocials()">socials</a> |
+      <a href="#" onclick="openSection('posts')">posts</a>
+    </nav>
+  </div>
 
-<!-- overlays -->
-<div id="about" class="overlay">
-  <div class="close-btn" onclick="closeOverlay()">✖</div>
-  <h2>about</h2>
-  <p>I think, therefore I log off.<br>Probably overthinking something right now.</p>
-</div>
+  <section id="about">
+    <p>I think, therefore I log off.<br>Probably overthinking something right now.</p>
+    <span class="back-btn" onclick="closeSection('about')">← back</span>
+  </section>
 
-<div id="socials" class="overlay">
-  <div class="close-btn" onclick="closeOverlay()">✖</div>
-  <h2>socials</h2>
-  <p>GitHub: <a href="https://github.com/SquidDrill" target="_blank">SquidDrill</a><br>Discord: @squiddrilll</p>
-</div>
+  <section id="posts">
+    <p>Nothing here yet... but something always brews under the surface.</p>
+    <span class="back-btn" onclick="closeSection('posts')">← back</span>
+  </section>
 
-<div id="posts" class="overlay">
-  <div class="close-btn" onclick="closeOverlay()">✖</div>
-  <h2>posts</h2>
-  <p>Nothing here... yet. Just static silence.</p>
-</div>
+  <!-- Socials Modal -->
+  <div class="modal" id="socialModal">
+    <h3>Socials</h3>
+    <p>GitHub: SquidDrill <button class="copy-btn" onclick="copyToClipboard('SquidDrill')">copy</button></p>
+    <p>Discord: squiddrilll <button class="copy-btn" onclick="copyToClipboard('squiddrilll')">copy</button></p>
+    <p class="modal-close" onclick="closeSocials()">Close</p>
+  </div>
 
-<div class="audio-button" onclick="toggleAudio(this)">🔊 music</div>
+  <audio id="bg-music" autoplay loop>
+    <source src="https://cdn.pixabay.com/audio/2023/06/21/audio_783a184b92.mp3" type="audio/mp3">
+  </audio>
+  <button id="music-control" onclick="toggleMusic()">♫ music</button>
 
-<audio id="bg-audio" loop autoplay>
-  <source src="https://cdn.pixabay.com/download/audio/2022/10/23/audio_d4c3cfa0e2.mp3" type="audio/mpeg">
-</audio>
+  <script>
+    function openSection(id) {
+      document.getElementById(id).style.display = 'block';
+    }
 
-<script>
-function openOverlay(id) {
-  document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-function closeOverlay() {
-  document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
-}
-function toggleAudio(btn) {
-  const audio = document.getElementById('bg-audio');
-  if (audio.paused) {
-    audio.play();
-    btn.innerText = '🔊 music';
-  } else {
-    audio.pause();
-    btn.innerText = '🔇 muted';
-  }
-}
-</script>
+    function closeSection(id) {
+      document.getElementById(id).style.display = 'none';
+    }
 
+    function openSocials() {
+      document.getElementById('socialModal').style.display = 'block';
+    }
+
+    function closeSocials() {
+      document.getElementById('socialModal').style.display = 'none';
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Copied: ' + text);
+      });
+    }
+
+    function toggleMusic() {
+      var music = document.getElementById('bg-music');
+      if (music.paused) {
+        music.play();
+      } else {
+        music.pause();
+      }
+    }
+  </script>
 </body>
 </html>
+"""
+
+# Write it to file
+html_path = "/mnt/data/index.html"
+with open(html_path, "w") as f:
+    f.write(enhanced_index_html)
+
+html_path
