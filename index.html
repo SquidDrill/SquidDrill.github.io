@@ -1,169 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SquidDrill</title>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Share Tech Mono', monospace;
-      background: #0a0a0a;
-      color: #dcdcdc;
-      overflow: hidden;
-    }
-
-    .fog, #particles-js {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .fog {
-      background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
-      animation: fogMove 120s linear infinite;
-      filter: blur(8px);
-    }
-
-    @keyframes fogMove {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(-50%, -50%); }
-    }
-
-    .intro-screen {
-      background: black;
-      color: #00ff88;
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      z-index: 9999;
-      font-size: 1rem;
-      padding: 3rem;
-      font-family: 'Share Tech Mono', monospace;
-      animation: typeIntro 3s steps(40) 1s 1 normal both;
-      white-space: pre-line;
-    }
-
-    @keyframes fadeOut {
-      to { opacity: 0; visibility: hidden; }
-    }
-
-    .container {
-      text-align: center;
-      padding-top: 60px;
-      position: relative;
-      z-index: 2;
-      display: none;
-    }
-
-    .avatar {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-      transition: all 0.3s ease-in-out;
-    }
-
-    .avatar:hover {
-      box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
-    }
-
-    h1.glitch {
-      font-size: 2.5em;
-      color: #c9c9ff;
-      position: relative;
-      animation: glitch 2s infinite;
-    }
-
-    @keyframes glitch {
-      0% { text-shadow: 2px 2px #ff00c8; }
-      50% { text-shadow: -2px -2px #00ffe1; }
-      100% { text-shadow: 2px 2px #ff00c8; }
-    }
-
-    .tagline {
-      font-size: 1em;
-      color: #888;
-      margin-bottom: 1.5rem;
-      animation: glitch 3s infinite;
-    }
-
-    nav a {
-      margin: 0 20px;
-      text-decoration: none;
-      color: #bbb;
-      font-size: 1.2em;
-      transition: color 0.3s;
-    }
-    nav a:hover { color: #fff; }
-
-    section {
-      display: none;
-      max-width: 600px;
-      margin: 2rem auto;
-      font-size: 1em;
-      padding: 1.5rem;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(5px);
-    }
-    section.active { display: block; }
-
-    .back-btn {
-      display: inline-block;
-      margin-top: 1.5rem;
-      text-decoration: underline;
-      color: #999;
-      cursor: pointer;
-    }
-
-    .copy-btn {
-      margin-left: 8px;
-      padding: 2px 6px;
-      font-size: 0.8em;
-      border: none;
-      background: #333;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    #music-box {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      background: rgba(0, 0, 0, 0.5);
-      color: #ddd;
-      padding: 10px 15px;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.85em;
-      border-radius: 10px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      z-index: 100;
-      backdrop-filter: blur(4px);
-    }
-    #music-box button {
-      background: transparent;
-      border: none;
-      color: #ccc;
-      cursor: pointer;
-      font-size: 1em;
-    }
-    #music-box button:hover { color: white; }
-  </style>
-</head>
 <body>
   <div class="intro-screen" id="intro">
-booting system...
-verifying consciousness...
-establishing vibe...
-welcome back, SquidDrill
+scanning...
+verifying subject...
+link established with: SquidDrill
+loading public interface...
   </div>
 
   <div class="fog"></div>
@@ -199,7 +39,7 @@ welcome back, SquidDrill
     <button onclick="toggleMute()">🔊</button>
   </div>
 
-  <audio id="bg-audio" autoplay loop>
+  <audio id="bg-audio" preload="auto">
     <source id="audio-source" src="https://cdn.pixabay.com/audio/2023/06/21/audio_783a184b92.mp3" type="audio/mp3">
   </audio>
 
@@ -213,12 +53,18 @@ welcome back, SquidDrill
     const audio = document.getElementById("bg-audio");
     const audioSource = document.getElementById("audio-source");
     const songName = document.getElementById("song-name");
+    const musicBox = document.getElementById("music-box");
 
     function loadTrack(index) {
       audioSource.src = playlist[index].src;
       songName.textContent = "♫ " + playlist[index].title;
       audio.load();
-      audio.play();
+      audio.play().then(() => {
+        musicBox.style.display = "flex";
+      }).catch(() => {
+        musicBox.style.display = "flex";
+        console.warn("Autoplay blocked. User interaction may be required.");
+      });
     }
 
     function nextTrack() {
@@ -246,16 +92,14 @@ welcome back, SquidDrill
       });
     }
 
-    // INTRO boot sequence
     window.onload = () => {
       setTimeout(() => {
         document.getElementById("intro").style.animation = "fadeOut 1s forwards";
         document.getElementById("main-content").style.display = "block";
+        loadTrack(currentTrack);
       }, 4000);
-      loadTrack(currentTrack);
     };
 
-    // particles.js config
     particlesJS("particles-js", {
       particles: {
         number: { value: 35 },
